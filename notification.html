@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <script type="text/javascript">
+            function getParameter(name){
+                name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+                var regexS = "[\\?&]"+name+"=([^&#]*)";
+                var regex = new RegExp( regexS );
+                var results = regex.exec( window.location.href );
+                if( results == null )
+                    return "";
+                else
+                    return results[1];
+            }
+            function openURL(url){
+                chrome.tabs.create({
+                    url:url,
+                    selected:true
+                });
+                window.close();
+            }
+        </script>
+    </head>
+    <body>
+        <div class="news-box" style="float:right;width:280px;border-radius:3px; padding: 0 5px;margin-bottom: 5px;padding-bottom: 10px">
+            <div class="news-photo" id="imgparent" style="float:right;width:74px;height:53px;margin:10px 0 0px 10px;">
+                <a id="link" href="" onclick="openURL(this.href)">
+                    <img id="img" alt="" src="" width="72" height="51" style="width:72px;height:51px;border:1px #4767a1 solid;">
+                </a>
+            </div>
+            <div class="box-news-left" style="float:right;width:195px;">
+                <div class="box-news-title" style="float:right;width:100%;margin-top:10px;font-weight:bold;font-size:13px;color:#4c4c4c;text-align:right;direction:rtl;">
+                    <a style="cursor:pointer;color:#000;text-decoration:none;" id="title" href="" onclick="openURL(this.href)"> </a>
+                </div>
+                <div id="desc" class="box-news-brief" style="float:right;width:100%;margin-top:7px;font-weight:normal;font-size:11px;color:#4c4c4c; text-align:right; direction:rtl;">  </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            if(getParameter('icon')==''){
+                document.getElementById("imgparent").parentNode.removeChild(document.getElementById("imgparent"))
+            }else{
+                document.getElementById("img").src=getParameter('icon')
+                document.getElementById("link").href=decodeURIComponent(getParameter('link'))
+            };
+            document.getElementById("title").innerHTML=decodeURIComponent(getParameter('title'));
+            document.getElementById("title").href=decodeURIComponent(getParameter('link'));
+            document.getElementById("desc").innerHTML=decodeURIComponent(getParameter('msg'));
+            var closetime=decodeURIComponent(getParameter('closeafter'));
+            if(closetime != 0){
+                window.setTimeout("window.close();",closetime * 1000);
+            }
+        </script>
+    </body>
+</html>
